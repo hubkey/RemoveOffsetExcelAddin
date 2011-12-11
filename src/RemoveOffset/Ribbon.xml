@@ -4,7 +4,7 @@
         <tabs>
             <tab idMso="TabAddIns">
                 <group id="hubKeyGroup" label="HubKey">
-                    <button id="removeOffsetButton" onAction="removeOffsetButton_Click" label="Remove Offset" showImage="true" imageMso="NameUseInFormula" />
+                    <button id="removeOffsetButton" onAction="RemoveOffsetButton_Click" label="Remove Offset" showImage="true" imageMso="NameUseInFormula" />
                 </group>
             </tab>
         </tabs>

@@ -121,10 +121,10 @@
     <value>Remove Offset</value>
   </data>
   <data name="No_range_selected" xml:space="preserve">
-    <value>No range selected!</value>
+    <value>No cells containing offset formulas were found!</value>
   </data>
   <data name="There_is_no_undo" xml:space="preserve">
-    <value>Remove offset function in selection? (There is no undo)</value>
+    <value>Remove offset function in selection? There is no undo!</value>
   </data>
   <data name="The_following_cells_were_skipped" xml:space="preserve">
     <value>The following cells were skipped because of errors: {0}</value>

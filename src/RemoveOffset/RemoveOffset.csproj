@@ -176,7 +176,7 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="Parser.cs" />
+    <Compile Include="FunctionParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

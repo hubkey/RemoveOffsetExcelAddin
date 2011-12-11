@@ -24,19 +24,27 @@ namespace RemoveOffset
         }
     }
 
-    public class Parser
+    public class FunctionParser
     {
         private const char OpenChar = '(';
         private const char CloseChar = ')';
-        private const string Head = "OFFSET";
+        private readonly string _functionName;
+        private readonly Func<ParserResult, string> _substitutionFunction;
         private readonly int _length;
         private string _input;
         private ParserState _state = ParserState.Error;
         private int _pos;
         private int _headPos;
 
-        public Parser(string input)
+        public FunctionParser(string functionName, string input)
+            : this(functionName, input, null)
         {
+        }
+
+        public FunctionParser(string functionName, string input, Func<ParserResult, string> substitutionFunction)
+        {
+            _substitutionFunction = substitutionFunction;
+            _functionName = functionName;
             _input = input;
             _length = _input.Length;
         }
@@ -51,21 +59,16 @@ namespace RemoveOffset
 
         public bool Parse()
         {
-            return Parse(null);
-        }
-
-        public bool Parse(Func<ParserResult, string> substitutionFunction)
-        {
             _state = ParserState.Parsing;
             Results = new List<ParserResult>();
             try
             {
-                while (ReadHead())
+                while (ReadFunctionName())
                 {
-                    var result = new ParserResult(_headPos, string.Concat(Head, ReadBody()));
+                    var result = new ParserResult(_headPos, string.Concat(_functionName, ReadFunctionBody()));
                     Results.Add(result);
-                    if (substitutionFunction == null) continue;
-                    var newValue = substitutionFunction(result);
+                    if (_substitutionFunction == null) continue;
+                    var newValue = _substitutionFunction(result);
                     _input = _input.Remove(result.Pos, result.Value.Length);
                     _input = _input.Insert(result.Pos, newValue);
                     _pos = result.Pos + newValue.Length;
@@ -81,7 +84,7 @@ namespace RemoveOffset
             return true;
         }
 
-        private string ReadBody()
+        private string ReadFunctionBody()
         {
             var body = new StringBuilder();
             var open = 0;
@@ -107,13 +110,13 @@ namespace RemoveOffset
         {
             return _pos < 0 || _pos >= _length || _headPos < 0 || _headPos > _length;
         }
-        private bool ReadHead()
+        private bool ReadFunctionName()
         {
             if (EOF())
                 return false;
-            _headPos = _input.IndexOf(Head + OpenChar, _pos);
+            _headPos = _input.IndexOf(_functionName + OpenChar, _pos);
             if (!EOF())
-                _pos = _headPos + Head.Length;
+                _pos = _headPos + _functionName.Length;
             return !EOF();
         }
     }

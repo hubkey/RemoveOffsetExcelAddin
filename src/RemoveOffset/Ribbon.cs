@@ -43,7 +43,7 @@ namespace RemoveOffset
             this.ribbon = ribbonUI;
         }
 
-        public void removeOffsetButton_Click(IRibbonControl control)
+        public void RemoveOffsetButton_Click(IRibbonControl control)
         {
             OnRibbonCommandClicked(RibbonCommands.RemoveOffset);
         }

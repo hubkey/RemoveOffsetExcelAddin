@@ -61,7 +61,7 @@ namespace RemoveOffset.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No range selected!.
+        ///   Looks up a localized string similar to No cells containing offset formulas were found!.
         /// </summary>
         internal static string No_range_selected {
             get {
@@ -79,7 +79,7 @@ namespace RemoveOffset.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove offset function in selection? (There is no undo).
+        ///   Looks up a localized string similar to Remove offset function in selection? There is no undo!.
         /// </summary>
         internal static string There_is_no_undo {
             get {
