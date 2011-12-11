@@ -31,7 +31,8 @@ namespace RemoveOffset
         private readonly string _functionName;
         private readonly Func<ParserResult, string> _substitutionFunction;
         private readonly int _length;
-        private string _input;
+        private readonly string _input;
+        private string _output;
         private ParserState _state = ParserState.Error;
         private int _pos;
         private int _headPos;
@@ -46,18 +47,20 @@ namespace RemoveOffset
             _substitutionFunction = substitutionFunction;
             _functionName = functionName;
             _input = input;
-            _length = _input.Length;
+            _output = input;
+            _length = _output.Length;
         }
 
         public List<ParserResult> Results { get; private set; }
-        public string Output { get { return _input; } }
+        public string Input { get { return _input; } }
+        public string Output { get { return _output; } }
 
         public ParserState State
         {
             get { return _state; }
         }
 
-        public bool Parse()
+        public ParserState Parse()
         {
             _state = ParserState.Parsing;
             Results = new List<ParserResult>();
@@ -69,29 +72,27 @@ namespace RemoveOffset
                     Results.Add(result);
                     if (_substitutionFunction == null) continue;
                     var newValue = _substitutionFunction(result);
-                    _input = _input.Remove(result.Pos, result.Value.Length);
-                    _input = _input.Insert(result.Pos, newValue);
+                    _output = _output.Remove(result.Pos, result.Value.Length);
+                    _output = _output.Insert(result.Pos, newValue);
                     _pos = result.Pos + newValue.Length;
                 }
 
             }
             catch
             {
-                _state = ParserState.Error;
-                return false;
+                return _state = ParserState.Error;
             }
-            _state = ParserState.Success;
-            return true;
+            return _state = ParserState.Success;
         }
 
         private string ReadFunctionBody()
         {
             var body = new StringBuilder();
             var open = 0;
-            while (!EOF())
+            while (!EOL())
             {
-                body.Append(_input[_pos]);
-                switch (_input[_pos++])
+                body.Append(_output[_pos]);
+                switch (_output[_pos++])
                 {
                     case OpenChar:
                         ++open;
@@ -106,18 +107,18 @@ namespace RemoveOffset
             return body.ToString();
         }
 
-        private bool EOF()
+        private bool EOL()
         {
             return _pos < 0 || _pos >= _length || _headPos < 0 || _headPos > _length;
         }
         private bool ReadFunctionName()
         {
-            if (EOF())
+            if (EOL())
                 return false;
-            _headPos = _input.IndexOf(_functionName + OpenChar, _pos);
-            if (!EOF())
+            _headPos = _output.IndexOf(_functionName + OpenChar, _pos);
+            if (!EOL())
                 _pos = _headPos + _functionName.Length;
-            return !EOF();
+            return !EOL();
         }
     }
 }

@@ -113,7 +113,7 @@ namespace RemoveOffset
                     });
 
                     var parser = new FunctionParser("OFFSET", cell.Formula, substitutionFunction);
-                    if (parser.Parse())
+                    if (parser.Parse() == ParserState.Success)
                         cell.Formula = parser.Output;
                 }
 
